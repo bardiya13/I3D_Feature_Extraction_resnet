@@ -10,13 +10,17 @@ from torch.autograd import Variable
 
 def load_frame(frame_file):
 	data = Image.open(frame_file)
-	data = data.resize((340, 256), Image.ANTIALIAS)
+	# data = data.resize((340, 256), Image.ANTIALIAS)
+	resampling_method = Image.LANCZOS if hasattr(Image, 'LANCZOS') else Image.ANTIALIAS
+	data = data.resize((340, 256), resampling_method)
+
 	data = np.array(data)
 	data = data.astype(float)
 	data = (data * 2 / 255) - 1
 	assert(data.max()<=1.0)
 	assert(data.min()>=-1.0)
 	return data
+
 
 
 def load_rgb_batch(frames_dir, rgb_files, frame_indices):
