@@ -16,7 +16,7 @@ from resnet import i3_res50
 import os
 
 
-def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sample_mode):
+def generate(framepath, labelpath, outputpath, pretrainedpath, frequency, batch_size, sample_mode):
 	Path(outputpath).mkdir(parents=True, exist_ok=True)
 
 	# Get all frame directories
@@ -27,6 +27,7 @@ def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sam
 	i3d = i3_res50(400, pretrainedpath)
 	i3d.cuda()
 	i3d.train(False)  # Set model to evaluate mode
+
 	for frame_dir in frame_dirs:
 		folder_name = frame_dir.name
 		start_time = time.time()
@@ -40,7 +41,6 @@ def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sam
 		np.save(os.path.join(outputpath, folder_name), features)
 		print(f"Obtained features of size: {features.shape}")
 		print(f"Done in {time.time() - start_time:.2f} seconds.")
-
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--framepath', type=str, default="/kaggle/input/shanghaitec-vad-test/frames", help="Path to directory containing frame folders")
