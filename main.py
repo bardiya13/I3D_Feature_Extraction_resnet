@@ -43,8 +43,8 @@ def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sam
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--framepath', type=str, default="frame/", help="Path to directory containing frame folders")
-	parser.add_argument('--labelpath', type=str, default="label/",
+	parser.add_argument('--framepath', type=str, default="/kaggle/input/shanghaitec-vad-test/frames", help="Path to directory containing frame folders")
+	parser.add_argument('--labelpath', type=str, default="/kaggle/input/shanghaitec-vad-test/label",
 						help="Path to directory containing label files (.npy)")
 	parser.add_argument('--outputpath', type=str, default="output")
 	parser.add_argument('--pretrainedpath', type=str, default="pretrained/i3d_r50_kinetics.pth")
