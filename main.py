@@ -43,8 +43,8 @@ def generate(framepath, labelpath, outputpath, pretrainedpath, frequency, batch_
 		print(f"Done in {time.time() - start_time:.2f} seconds.")
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
-	parser.add_argument('--framepath', type=str, default="/kaggle/input/shanghaitec-vad-test/frames", help="Path to directory containing frame folders")
-	parser.add_argument('--labelpath', type=str, default="/kaggle/input/shanghaitec-vad-test/label",
+	parser.add_argument('--framepath', type=str, default="/kaggle/working/train", help="Path to directory containing frame folders")
+	parser.add_argument('--labelpath', type=str, default="/kaggle/working/train_labels",
 						help="Path to directory containing label files (.npy)")
 	parser.add_argument('--outputpath', type=str, default="output")
 	parser.add_argument('--pretrainedpath', type=str, default="pretrained/i3d_r50_kinetics.pth")
