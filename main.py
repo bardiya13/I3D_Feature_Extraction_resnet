@@ -29,7 +29,10 @@ def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sam
 		startime = time.time()
 		print("Generating for {0}".format(video))
 		Path(temppath).mkdir(parents=True, exist_ok=True)
-		ffmpeg.input(video).output('{}%d.jpg'.format(temppath),start_number=0).global_args('-loglevel', 'quiet').run()
+		# ffmpeg.input(video).output('{}%d.jpg'.format(temppath),start_number=0).global_args('-loglevel', 'quiet').run()
+		ffmpeg.input(video).output(os.path.join(temppath, '%d.jpg'), start_number=0).global_args('-loglevel',
+																								 'quiet').run()
+
 		print("Preprocessing done..")
 		features = run(i3d, frequency, temppath, batch_size, sample_mode)
 		np.save(outputpath + "/" + videoname, features)
