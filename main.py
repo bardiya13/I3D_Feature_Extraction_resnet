@@ -6,7 +6,7 @@ import shutil
 import argparse
 import numpy as np
 import time
-import ffmpeg
+# import ffmpeg
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -29,8 +29,13 @@ def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sam
 		startime = time.time()
 		print("Generating for {0}".format(video))
 		Path(temppath).mkdir(parents=True, exist_ok=True)
-		ffmpeg.input(video).output('{}%d.jpg'.format(temppath),start_number=0).global_args('-loglevel', 'quiet').run()
+		output_pattern = os.path.join(temppath, '%d.jpg')
+		subprocess.call(['ffmpeg', '-i', video, '-loglevel', 'quiet', output_pattern],
+						stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		# ffmpeg.input(video).output('{}%d.jpg'.format(temppath),start_number=0).global_args('-loglevel', 'quiet').run()
 		# ffmpeg.input(video).output(os.path.join(temppath, '%d.jpg'), start_number=0).global_args('-loglevel',
+		#
+		#
 		#
 		#
 		# 																						 'quiet').run()
