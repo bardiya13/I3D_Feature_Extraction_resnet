@@ -7,11 +7,13 @@ import torch
 from natsort import natsorted
 from PIL import Image
 from torch.autograd import Variable
+from PIL import Image  # make sure this line is at the top
+
 
 
 def load_frame(frame_file):
     data = Image.open(frame_file)
-    data = data.resize((340, 256), Image.ANTIALIAS)
+    data = data.resize((340, 256), Image.Resampling.LANCZOS)
     data = np.array(data)
     data = data.astype(float)
     data = (data * 2 / 255) - 1
