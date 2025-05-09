@@ -22,9 +22,7 @@ def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sam
     # temppath = outputpath+ "/temp/"
     rootdir = Path(datasetpath)
     frame_dirs = [f for f in rootdir.iterdir() if f.is_dir()]
-
-
-	device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 	i3d = i3_res50(400, pretrainedpath)
 	i3d.to(device)
 	i3d.train(False)  # Set model to evaluate mode
