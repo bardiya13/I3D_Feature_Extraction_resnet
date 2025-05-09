@@ -1,5 +1,5 @@
 from extract_features import run
-from resnet import i3_res50
+import i3_res50
 import os
 from pathlib import Path
 import shutil
