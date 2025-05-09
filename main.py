@@ -41,9 +41,10 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--datasetpath', type=str, default="/kaggle/working/train")
 	parser.add_argument('--outputpath', type=str, default="/kaggle/working/feauter_train")
-	parser.add_argument('--pretrainedpath', type=str, default="/kaggle/working/pretrained/i3d_baseline_32x2_IN_pretrain_400k.pkl")
+	parser.add_argument('--pretrainedpath', type=str, default="/kaggle/working/I3D_Feature_Extraction_resnet/pretrained/i3d_r50_kinetics.pth")
 	parser.add_argument('--frequency', type=int, default=16)
 	parser.add_argument('--batch_size', type=int, default=20)
 	parser.add_argument('--sample_mode', type=str, default="oversample")
 	args = parser.parse_args()
 	generate(args.datasetpath, str(args.outputpath), args.pretrainedpath, args.frequency, args.batch_size, args.sample_mode)
+
