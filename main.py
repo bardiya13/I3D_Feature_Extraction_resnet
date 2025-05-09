@@ -14,7 +14,7 @@ import torch.optim as optim
 from torch.optim import lr_scheduler
 from torch.autograd import Variable
 import torchvision
-
+import subprocess
 def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sample_mode):
 	Path(outputpath).mkdir(parents=True, exist_ok=True)
 	temppath = outputpath+ "/temp/"
