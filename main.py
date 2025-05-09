@@ -19,17 +19,24 @@ import subprocess
 
 def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sample_mode):
     Path(outputpath).mkdir(parents=True, exist_ok=True)
-    # temppath = outputpath+ "/temp/"
     rootdir = Path(datasetpath)
     frame_dirs = [f for f in rootdir.iterdir() if f.is_dir()]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-	i3d = i3_res50(400, pretrainedpath)
-	i3d.to(device)
-	i3d.train(False)  # Set model to evaluate mode
-	for frame_dirs in frame_dirs:
-    	folder_name = frame_dirs.name
-		start_time = time.time()
-		print(f"Generating features for {folder_name}")
+    i3d = i3_res50(400, pretrainedpath)
+    i3d.to(device)
+    i3d.train(False)  # Set model to evaluate mode
+
+    for frame_dir in frame_dirs:
+        folder_name = frame_dir.name
+        start_time = time.time()
+        print(f"Generating features for {folder_name}")
+
+        print("Preprocessing done..")
+        features = run(i3d, frequency, str(frame_dir), batch_size, sample_mode)
+        np.save(os.path.join(outputpath, folder_name), features)
+        print(f"Obtained features of size: {features.shape}")
+        print(f"Done in {time.time() - start_time:.2f} seconds.")
+
 
 # ffmpeg.input(video).output('{}%d.jpg'.format(temppath),start_number=0).global_args('-loglevel', 'quiet').run()
 # ffmpeg.input(video).output(os.path.join(temppath, '%d.jpg'), start_number=0).global_args('-loglevel',
