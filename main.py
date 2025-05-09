@@ -17,36 +17,31 @@ import torchvision
 import subprocess
 def generate(datasetpath, outputpath, pretrainedpath, frequency, batch_size, sample_mode):
 	Path(outputpath).mkdir(parents=True, exist_ok=True)
-	temppath = outputpath+ "/temp/"
+	# temppath = outputpath+ "/temp/"
 	rootdir = Path(datasetpath)
-	videos = [str(f) for f in rootdir.glob('**/*.mp4')]
+	frame_dirs = [f for f in rootdir.iterdir() if f.is_dir()]
 	# setup the model
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 	i3d = i3_res50(400, pretrainedpath)
-	i3d.cuda()
+    i3d.to(device)
 	i3d.train(False)  # Set model to evaluate mode
-	for video in videos:
-		videoname = video.split("/")[-1].split(".")[0]
-		startime = time.time()
-		print("Generating for {0}".format(video))
-		Path(temppath).mkdir(parents=True, exist_ok=True)
-		output_pattern = os.path.join(temppath, '%d.jpg')
-		subprocess.call(['ffmpeg', '-i', video, '-loglevel', 'quiet', output_pattern],
-						stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	for frame_dirs in frame_dirs:
+        folder_name = frame_dir.name
+        start_time = time.time()
+        print(f"Generating features for {folder_name}")
+
+
+
 		# ffmpeg.input(video).output('{}%d.jpg'.format(temppath),start_number=0).global_args('-loglevel', 'quiet').run()
 		# ffmpeg.input(video).output(os.path.join(temppath, '%d.jpg'), start_number=0).global_args('-loglevel',
-		#
-		#
-		#
-		#
-		# 																						 'quiet').run()
 
 		print("Preprocessing done..")
-		features = run(i3d, frequency, temppath, batch_size, sample_mode)
-		np.save(outputpath + "/" + videoname, features)
-		print("Obtained features of size: ", features.shape)
-		shutil.rmtree(temppath)
-		print("done in {0}.".format(time.time() - startime))
+		features = run(i3d, frequency,str(frame_dir), batch_size, sample_mode)
+        np.save(os.path.join(outputpath, folder_name), features)
+        print(f"Obtained features of size: {features.shape}")
+        print(f"Done in {time.time() - start_time:.2f} seconds.")
 #######
+
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--datasetpath', type=str, default="/kaggle/working/train")
@@ -57,4 +52,5 @@ if __name__ == '__main__':
 	parser.add_argument('--sample_mode', type=str, default="oversample")
 	args = parser.parse_args()
 	generate(args.datasetpath, str(args.outputpath), args.pretrainedpath, args.frequency, args.batch_size, args.sample_mode)
+
 
